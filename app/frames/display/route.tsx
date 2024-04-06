@@ -8,7 +8,7 @@ export const POST = frames(async (ctx) => {
     const hkLength = hk.length
     const latestHaiku = hk[hkLength - 1]
     const state = ctx.state
-    const newState = { ...state, id: ctx.searchParams.id, haiku: latestHaiku?.haikipu.haiku };
+    const newState = { ...state, id: ctx.searchParams.id };
 
 
 
@@ -29,13 +29,17 @@ export const POST = frames(async (ctx) => {
                 left: 0, right: 0, top: 0, bottom: 0, position: "absolute"
             }}>
                 {latestHaiku?.haikipu ?
-                    <div tw="flex flex-col">
+                    <div tw="flex flex-col -top-24">
 
                         HaiKus
-                        <span style={{ fontSize: 20, bottom: 0, right: 0, position: "relative", backgroundColor: "black", color: "white" }}> made by the Nerds</span>
-                        <div style={{ fontSize: 40 }} tw="flex flex-col w-2/3">{latestHaiku.haikipu?.haiku}
 
+                        <div tw="flex flex-col" style={{ fontSize: 20, bottom: 0, right: 0, position: "relative", backgroundColor: "black", color: "white" }}> made by the Nerds
+                            <br />
                         </div>
+
+                        <span style={{ fontSize: 40 }} tw="flex flex-col w-2/3 top-12 left-52 p-6">{latestHaiku?.haikipu.haiku}
+
+                        </span>
 
 
                     </div> : <div>loading</div>}

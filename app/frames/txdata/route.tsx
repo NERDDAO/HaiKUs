@@ -15,14 +15,29 @@ export async function POST(
 ): Promise<NextResponse<TransactionTargetResponse>> {
     const json = await req.json();
 
+
+
     const frameMessage = await getFrameMessage(json);
     if (!frameMessage) {
         throw new Error("No frame message");
     }
+    console.log(frameMessage);
+    const state = JSON.parse(frameMessage.state || "{}")
+
+    const haiku = await fetch(`https://fworks.vercel.app/api/mongo/haiku?id=${state.id}`)
+    const hk = await haiku.json()
+    const hkLength = hk.length
+    const latestHaiku = hk[hkLength - 1]
 
     const abi = [
         {
-            inputs: [{ internalType: "string", name: "_userText", type: "string" }],
+            inputs: [
+                {
+                    internalType: "string",
+                    name: "_userText",
+                    type: "string"
+                }
+            ],
             name: "mint",
             outputs: [],
             stateMutability: "payable",
@@ -30,9 +45,9 @@ export async function POST(
         },
     ] as const
     const calldata = encodeFunctionData({
-        abi: abi as Abi,
+        abi: abi,
         functionName: "mint",
-        args: ["test data"],
+        args: [latestHaiku.haikipu?.haiku]
     });
 
     const STORAGE_REGISTRY_ADDRESS = "0xd02D7C87E9EB71ABCd544D07230849Fc5EdcbD55";

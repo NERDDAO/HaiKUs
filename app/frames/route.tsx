@@ -48,11 +48,7 @@ const frameHandler = frames(async ({ ctx }) => {
                 target="/submit"
             >
                 Submit
-            </Button>,
-            // Without query params
-            <Button action="post" target="/display">
-                Display
-            </Button>,
+            </Button>
         ],
     };
 });

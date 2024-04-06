@@ -18,7 +18,6 @@ export type Haikipu = {
 
 export type State = {
     id: string,
-    haiku: string
 }
 
 export const frames = createFrames<State>({

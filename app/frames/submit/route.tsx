@@ -43,7 +43,6 @@ export const POST = frames(async (ctx) => {
             </div>
         ),
         buttons: [
-            <Button action="post" target="/" >Back</Button>,
             <Button action="post" target="/loading" >Submit</Button>,
         ],
         textInput: "Enter the subject of your HaiKu",

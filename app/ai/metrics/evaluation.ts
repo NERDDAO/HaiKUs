@@ -1,12 +1,11 @@
 import { Db } from "mongodb";
-import { AIEvaluation, Haikipu } from "~~/types/dbSchema";
 
 export async function storeEvaluationByProject(
     db: Db,
     projectId: string,
     usedEmbeddings: string[],
     embeddingId: string,
-    haikipu: Haikipu
+    haikipu: any
 ) {
     const hackCodex = db.collection("nerdWork");
     const evaluations = db.collection("evaluations");

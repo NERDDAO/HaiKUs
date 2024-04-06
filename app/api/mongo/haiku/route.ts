@@ -1,6 +1,5 @@
 
 
-
 import clientPromise from "~~/app/lib/mongodb";
 
 import { NextResponse } from "next/server";
@@ -20,8 +19,8 @@ export async function GET(req: Request) {
         const db = client.db("nerdWorkState"); // Connect to the Database
 
         aiu = await db
-            .collection("nerdCanvas")
-            .find({ address: param })
+            .collection("nerdHaikus")
+            .find({ id: param })//.find({ haiku:{type: param }})
             .limit(50)
             .toArray();
 

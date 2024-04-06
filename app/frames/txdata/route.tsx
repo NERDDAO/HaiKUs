@@ -16,8 +16,6 @@ export async function POST(
     const json = await req.json();
 
     const frameMessage = await getFrameMessage(json);
-    console.log("Frame message", frameMessage);
-
     if (!frameMessage) {
         throw new Error("No frame message");
     }
@@ -46,7 +44,7 @@ export async function POST(
             abi: abi as Abi,
             to: STORAGE_REGISTRY_ADDRESS,
             data: calldata,
-            value: "0.000071ether",
+            value: "70000000000001",
         },
     });
 }

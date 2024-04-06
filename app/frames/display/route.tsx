@@ -61,7 +61,7 @@ export const POST = frames(async (ctx) => {
             <Button action="post" target="/">
                 Go back
             </Button>,
-            <Button action="tx" target="/txdata" post_url="/frames">
+            <Button action="tx" target="/txdata" post_url="/tx-success">
                 Mint HaiKU!
             </Button>
         ],

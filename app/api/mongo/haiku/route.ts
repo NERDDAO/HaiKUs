@@ -11,8 +11,13 @@ export async function GET(req: Request) {
     // Database Name
     // Use connect method to connect to the server
     const { searchParams } = new URL(req.url);
-    const param = searchParams.get("id");
-    console.log(param);
+    let param: string | number | null = searchParams.get("id");
+    let myType = "address";
+    myType = searchParams.get("type") || "address";
+    if (myType === "hash") myType = "id";
+    if (param && myType === "address") param = Number(param);
+    const query = { myType: param };
+    console.log(param, myType);
     try {
         const client = await clientPromise;
 
@@ -20,7 +25,7 @@ export async function GET(req: Request) {
 
         aiu = await db
             .collection("nerdHaikus")
-            .find({ id: param })//.find({ haiku:{type: param }})
+            .find(query)//.find({ haiku:{type: param }})
             .limit(50)
             .toArray();
 

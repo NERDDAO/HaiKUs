@@ -57,7 +57,7 @@ export const POST = frames(async (ctx) => {
 
         ),
         buttons: [
-            <Button action="post" target={{ pathname: "/display", query: { id: id.toString() } }} >View</Button>,
+            <Button action="post" target={{ pathname: "/display", query: { id: id.toString(), type: "hash" } }} >View</Button>,
         ],
     }
 });

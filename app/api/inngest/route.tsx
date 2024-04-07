@@ -1,11 +1,12 @@
 import { serve } from "inngest/next";
 import { inngest } from "../../inngest/client";
-import { helloWorld } from "../../inngest/functions";
+import { helloWorld, hello2World } from "../../inngest/functions";
 
 export const { GET, POST, PUT } = serve({
     client: inngest,
     functions: [
-        helloWorld, // <-- This is where you'll always add all your functions
+        helloWorld,
+        hello2World// <-- This is where you'll always add all your functions
     ],
 });
 

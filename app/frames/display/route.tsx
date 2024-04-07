@@ -2,15 +2,23 @@
 import { frames } from "../frames";
 import { Button } from "frames.js/next";
 
-export const POST = frames(async (ctx) => {
-    const haiku = await fetch(`https://fworks.vercel.app/api/mongo/haiku?id=${ctx.searchParams.id}`)
+const frameHandler = frames(async (ctx) => {
+    const haiku = await fetch(`http://fworks.vercel.app/api/mongo/haiku?id=${ctx.searchParams.id}&type=${ctx.searchParams.type}`)
     const hk = await haiku.json()
     const hkLength = hk.length
-    const latestHaiku = hk[hkLength - 1]
+    const currentState = ctx.state
+    const hkIndex = () => {
+        if (currentState.count === hkLength) {
+            return 0
+        }
+        return currentState.count + 1
+    }
+
+    const index: number = hkIndex()
+    const latestHaiku = hk[hkLength - (1 + index)]
     const state = ctx.state
-    const newState = { ...state, id: ctx.searchParams.id };
-
-
+    const newState = { ...state, id: ctx.searchParams?.id, count: index };
+    console.log(hk.length);
 
     return {
         image:
@@ -40,6 +48,7 @@ export const POST = frames(async (ctx) => {
                         <span style={{ fontSize: 40 }} tw="flex flex-col w-2/3 top-12 left-52 p-6">{latestHaiku?.haikipu.haiku}
 
                         </span>
+                        <span style={{ fontSize: 20 }}>{index} of {hk.length}</span>
 
 
                     </div> : <div>loading</div>}
@@ -62,13 +71,19 @@ export const POST = frames(async (ctx) => {
             <Button action="post" target={{ pathname: "/display", query: { id: ctx.searchParams.id } }}>
                 Refresh
             </Button>,
-            <Button action="post" target="/">
-                Go back
-            </Button>,
             <Button action="tx" target="/txdata" post_url="/tx-success">
                 Mint HaiKU!
-            </Button>
+            </Button>,
+            <Button action="post" target={{ pathname: "/display", query: { id: ctx.searchParams.id, count: index } }}>
+                Next
+            </Button>,
+            <Button action="post" target="/">
+                Home
+            </Button>,
         ],
         state: newState,
     };
 });
+
+export const GET = frameHandler;
+export const POST = frameHandler;

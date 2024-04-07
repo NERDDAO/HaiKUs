@@ -18,11 +18,12 @@ export type Haikipu = {
 
 export type State = {
     id: string,
+    count: number,
 }
 
 export const frames = createFrames<State>({
     basePath: "/frames",
-    initialState: { id: "", haiku: "" } as State,
+    initialState: { id: "", count: 0 } as State,
     middleware: [
 
         openframes({

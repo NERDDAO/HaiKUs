@@ -1,22 +1,28 @@
 /* eslint-disable react/jsx-key */
+import { frames } from "../frames";
 import { Button } from "frames.js/next";
-import { frames, Haikipu } from "../frames";
-import { inngest } from "~~/app/inngest/client"
-import { ObjectId } from "mongodb";
 
-export const POST = frames(async (ctx) => {
-    const id = new ObjectId()
-    await inngest.send({
-        name: "test/hello.world",
-        data: {
-            id: id,
-            prompt: ctx.message?.inputText,
-            fid: ctx.message?.requesterFid
-        },
-    });
+const frameHandler = frames(async (ctx) => {
+    const haiku = await fetch(`http://fworks.vercel.app/api/mongo/haiku?id=${ctx.searchParams.id}&type=hash`)
+    const hk = await haiku.json()
+    const hkLength = hk.length
+    let currentState = ctx.state
+    if (currentState.count!) currentState.count = 0
+    const hkIndex = () => {
+        if (currentState.count === hkLength - 1) {
+            return 0
+        }
+        return currentState.count + 1
+    }
+
+    const index: number = hkIndex()
+    const latestHaiku = hk[hkLength - (1 + index)]
+    const state = ctx.state
+    const newState = { ...state, id: latestHaiku?.id, count: index };
+    console.log(hk.length);
 
     return {
-        image: (
+        image:
 
 
 
@@ -31,14 +37,23 @@ export const POST = frames(async (ctx) => {
                 justifyContent: "center",
                 left: 0, right: 0, top: 0, bottom: 0, position: "absolute"
             }}>
-                <div tw="flex flex-col">
+                {latestHaiku?.haikipu ?
+                    <div tw="flex flex-col -top-24">
 
-                    HaiKus
-                    <span style={{ fontSize: 20, bottom: 0, right: 0, position: "relative", backgroundColor: "black", color: "white" }}> made by the Nerds</span>
-                    <span style={{ fontSize: 30 }}> fid@{ctx.message?.requesterFid} generating...</span>
-                    <span>{ctx.message?.inputText}</span>
-                </div>
-                <svg style={{ left: 50, height: "250px", width: "250px" }} xmlns="http://www.w3.org/2000/svg" version="1.1" id="Layer_1" viewBox="0 0 512 512">
+                        HaiKus
+
+                        <div tw="flex flex-col" style={{ fontSize: 20, bottom: 0, right: 0, position: "relative", backgroundColor: "black", color: "white" }}> made by the Nerds
+                            <br />
+                        </div>
+
+                        <span style={{ fontSize: 40 }} tw="flex flex-col w-2/3 top-12 left-52 p-6">{latestHaiku?.haikipu.haiku}
+
+                        </span>
+                        <span style={{ fontSize: 20 }}>{index + 1} of {hk.length}</span>
+
+
+                    </div> : <div>loading</div>}
+                <svg style={{ left: 0, height: "250px", width: "250px" }} xmlns="http://www.w3.org/2000/svg" version="1.1" id="Layer_1" viewBox="0 0 512 512">
                     <path style={{ fill: "#FF1A26" }} d="M267.13,239.304h-94.609c-39.893,0-72.348-29.959-72.348-66.783v-38.957h33.391v38.957  c0,18.412,17.476,33.391,38.957,33.391h94.609V239.304z" />
                     <polygon style={{ fill: "#FF832F" }} points="467.478,422.957 456.348,512 256,512 233.739,422.957 " />
                     <polygon style={{ fill: "#FFB833" }} points="256,422.957 256,512 55.652,512 44.522,422.957 " />
@@ -52,12 +67,21 @@ export const POST = frames(async (ctx) => {
                     <rect y="406.261" style={{ fill: "#FFD485" }} width="256" height="33.391" />
                 </svg>
 
-            </div>
-
-
-        ),
+            </div>, // foo: bar
         buttons: [
-            <Button action="post" target={{ pathname: "/newDisplay", query: { id: id.toString() } }} >View</Button>,
+            <Button action="post" target={{ pathname: "/newDisplay", query: { id: ctx.searchParams.id } }}>
+                Refresh
+            </Button>,
+            <Button action="tx" target="/txdata" post_url="/tx-success">
+                Mint HaiKU!
+            </Button>,
+            <Button action="post" target="/">
+                Home
+            </Button>,
         ],
-    }
+        state: newState,
+    };
 });
+
+export const GET = frameHandler;
+export const POST = frameHandler;

@@ -24,10 +24,11 @@ export async function POST(
     console.log(frameMessage);
     const state = JSON.parse(frameMessage.state || "{}")
 
-    const haiku = await fetch(`https://fworks.vercel.app/api/mongo/haiku?id=${state.id}`)
+    const haiku = await fetch(`https://fworks.vercel.app/api/mongo/haiku?id=${state.id}&type=hash`)
     const hk = await haiku.json()
     const hkLength = hk.length
     const latestHaiku = hk[hkLength - 1]
+    console.log(hk, latestHaiku, state.id)
 
     const abi = [
         {

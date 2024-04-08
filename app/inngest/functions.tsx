@@ -51,7 +51,7 @@ export const hello2World = inngest.createFunction(
         const haikiput: Haikipu = {
             title: 'Casted Haikus',
             id: hash,
-            address: event.data.fid.toString(),
+            address: event.data.fid,
             timestamp: Date.now().toString(),
             type: "cast",
             contextSummary: "You write haikus and weave them coherently",

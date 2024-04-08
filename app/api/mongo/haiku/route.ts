@@ -12,12 +12,13 @@ export async function GET(req: Request) {
     // Use connect method to connect to the server
     const { searchParams } = new URL(req.url);
     let param: string | number | null = searchParams.get("id");
-    let myType = "address";
-    myType = searchParams.get("type") || "address";
+
+    let myType = searchParams.get("type");
+    if (myType !== "hash") myType = "address";
     if (myType === "hash") myType = "id";
-    if (param && myType === "address") param = Number(param);
-    const query = { myType: param };
-    console.log(param, myType);
+    if (myType === "address") param = Number(param);
+    const query = { [myType]: param };
+    console.log(query);
     try {
         const client = await clientPromise;
 

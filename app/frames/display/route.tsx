@@ -3,22 +3,23 @@ import { frames } from "../frames";
 import { Button } from "frames.js/next";
 
 const frameHandler = frames(async (ctx) => {
-    const haiku = await fetch(`http://fworks.vercel.app/api/mongo/haiku?id=${ctx.searchParams.id}&type=${ctx.searchParams.type}`)
+    const haiku = await fetch(`https://fworks.vercel.app/api/mongo/haiku?id=${ctx.searchParams.id}`)
     const hk = await haiku.json()
     const hkLength = hk.length
-    const currentState = ctx.state
+    let currentState = ctx.state
+    if (!currentState.count) currentState.count = 0
     const hkIndex = () => {
-        if (currentState.count === hkLength) {
+        if (Number(currentState.count) >= hkLength - 1) {
             return 0
         }
         return currentState.count + 1
     }
-
+    console.log(ctx.state)
     const index: number = hkIndex()
-    const latestHaiku = hk[hkLength - (1 + index)]
+    const latestHaiku = hk[hkLength - (index)]
     const state = ctx.state
-    const newState = { ...state, id: ctx.searchParams?.id, count: index };
-    console.log(hk.length);
+    const newState = { ...state, id: latestHaiku?.id, count: index };
+    console.log(hk.length, latestHaiku);
 
     return {
         image:
@@ -68,9 +69,6 @@ const frameHandler = frames(async (ctx) => {
 
             </div>, // foo: bar
         buttons: [
-            <Button action="post" target={{ pathname: "/display", query: { id: ctx.searchParams.id } }}>
-                Refresh
-            </Button>,
             <Button action="tx" target="/txdata" post_url="/tx-success">
                 Mint HaiKU!
             </Button>,

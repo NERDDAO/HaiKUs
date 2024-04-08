@@ -4,7 +4,7 @@ import { Button } from "frames.js/next";
 
 export const POST = frames(async (ctx) => {
     const state = ctx.state
-    const haiku = await fetch(`https://fworks.vercel.app/api/mongo/haiku?id=${state.id}`)
+    const haiku = await fetch(`https://fworks.vercel.app/api/mongo/haiku?id=${state.id}&type=hash`)
     const hk = await haiku.json()
     const hkLength = hk.length
     const latestHaiku = hk[hkLength - 1]

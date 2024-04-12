@@ -1,10 +1,7 @@
 /* eslint-disable react/jsx-key */
-import { Haikipu, frames } from "./frames";
+import { Haikipu, frames } from "../frames";
 import { Button } from "frames.js/next";
-import Image from "next/image";
-import campfire from "./campfire.svg";
-import { ObjectId } from 'mongodb'
-import Bonfire from "../../components/assets/bonfireLogo"
+import Bonfire from "../../../components/assets/bonfireLogo"
 
 const frameHandler = frames(async ({ ctx }) => {
     return {
@@ -33,7 +30,7 @@ const frameHandler = frames(async ({ ctx }) => {
             // With query params
             <Button
                 action="post"
-                target="/charSelect"
+                target="/route"
             >
                 Submit
             </Button>

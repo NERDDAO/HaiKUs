@@ -27,7 +27,7 @@ export async function GET(req: Request) {
         aiu = await db
             .collection("nerdHaikus")
             .find(query)//.find({ haiku:{type: param }})
-            .limit(50)
+            .limit(100)
             .toArray();
 
         return NextResponse.json(aiu); // Response to MongoClient

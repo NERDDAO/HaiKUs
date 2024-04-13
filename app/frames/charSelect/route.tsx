@@ -4,6 +4,10 @@ import { Button } from "frames.js/next";
 import Bonfire from "../../../components/assets/bonfireLogo"
 
 const frameHandler = frames(async ({ ctx }) => {
+    // check NFT balance
+    // display list of NFTs
+    // if no balance prompt mint
+    // else move playerId to game state
     return {
         image: <div style={{
             color: 'white',
@@ -30,9 +34,15 @@ const frameHandler = frames(async ({ ctx }) => {
             // With query params
             <Button
                 action="post"
+                target="/submit"
+            >
+                New Journey
+            </Button>,
+            <Button
+                action="post"
                 target="/route"
             >
-                Submit
+                Continue
             </Button>
 
         ],

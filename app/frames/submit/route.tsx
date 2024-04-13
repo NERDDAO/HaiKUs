@@ -35,6 +35,7 @@ export const POST = frames(async (ctx) => {
 
             <Button action="post" target="/display" >Continue</Button>,
         ],
+        textInput: "stuff"
     }
 });
 
